@@ -10,7 +10,7 @@ import { Client } from "@stomp/stompjs";
 
 interface Message {
   type: "NEW" | "UPDATE" | "LOG" | "ERROR" | string;
-  payload: any;
+  payload: unknown;
 }
 
 export default function WebSocketTester() {
