@@ -10,11 +10,13 @@ import { Client } from "@stomp/stompjs";
 
 interface Message {
   type: "NEW" | "UPDATE" | "LOG" | "ERROR" | string;
-  payload: unknown;
+  payload: any;
 }
 
 export default function WebSocketTester() {
-  const [wsUrl, setWsUrl] = useState("http://my-socket-server");
+  const [wsUrl, setWsUrl] = useState(
+    "http://localhost:8081/mobile-api/ws/notifications"
+  );
   const [useAuth, setUseAuth] = useState(false);
   const [token, setToken] = useState("");
 
@@ -38,14 +40,13 @@ export default function WebSocketTester() {
       webSocketFactory: () => socket,
       connectHeaders: useAuth ? { "x-auth-token": token } : {},
       debug: (str) => {
-        console.log(str);
         setMessages((prev) => [...prev, { type: "LOG", payload: str }]);
       },
       reconnectDelay: 5000,
     });
 
     client.onConnect = () => {
-      console.log("Connected to WebSocket");
+      console.info("Connected to WebSocket");
       setConnected(true);
 
       subscriptions.forEach((subChannel) => {
